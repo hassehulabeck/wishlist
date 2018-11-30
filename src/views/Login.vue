@@ -5,7 +5,7 @@
     <input type="password" v-model="password" placeholder="Password"><br>
     <button @click="login">Connection</button>
     <p>You don't have an account ? You can <router-link to="/sign-up">create one</router-link></p>
-    <p>Eller <a @click='fblogin'>sajna in via Google</a></p>
+    <p>Eller <a @click='googlelogin'>sajna in via Google</a></p>
   </div>
 </template>
 
@@ -21,7 +21,7 @@
       }
     },
     methods: {
-      fblogin: function() {
+      googlelogin: function() {
         var provider = new firebase.auth.GoogleAuthProvider();
 
         firebase.auth().signInWithPopup(provider).then(

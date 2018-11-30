@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <List />
+    <Inputter />
     <button @click="logout">Logout</button>
   </div>
 </template>
@@ -8,12 +9,14 @@
 <script>
 import firebase from 'firebase';
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Inputter from '@/components/Inputter'
+import List from '@/components/List'
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    Inputter,
+    List
   },
   methods: {
     logout: function() {
