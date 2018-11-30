@@ -3,7 +3,7 @@
     <section v-if="message.length>0"> {{ message }} </section>
     <h2>Lägg till en produkt</h2>
     <label for="">Produkt</label>
-    <input type="text" name="productName" v-model="productName">
+    <input type="text" name="name" v-model="name">
     <label for="">Pris</label>
     <input type="number" name="price" v-model="price">
     <label for="">Färg</label>
@@ -19,23 +19,26 @@ export default {
   name: 'Inputter',
   data() {
     return {
-      productName: '',
+      name: '',
       price: 0,
       color: '',
       message: ''
     }
   },
   firebase: {
-    products: db.ref('products/food')
+    products: db.ref('products')
   },
   methods: {
     storeData() {
       this.$firebaseRefs.products.push({
-        productName: this.productName,
+        name: this.name,
         price: this.price,
         color: this.color
       })
       this.message = "Gick bra att pusha data";
+      this.name = ''
+      this.price = ''
+      this.color = ''
     }
   }
 }

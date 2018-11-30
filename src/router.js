@@ -3,6 +3,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Home from '@/views/Home';
+import Edit from '@/views/Edit';
 import Login from '@/views/Login';
 import SignUp from '@/views/SignUp';
 
@@ -35,17 +36,22 @@ const router = new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '/edit:product',
+      name: 'edit',
+      component: Edit
     }
   ]
 });
 
-router.beforeEach((to, from, next) => {
-  const currentUser = firebase.auth().currentUser;
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-
-  if (requiresAuth && !currentUser) next('login');
-  else if (!requiresAuth && currentUser) next('home');
-  else next();
-});
+// router.beforeEach((to, from, next) => {
+//   const currentUser = firebase.auth().currentUser;
+//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+//
+//   if (requiresAuth && !currentUser) next('login');
+//   else if (!requiresAuth && currentUser) next('home');
+//   else next();
+// });
 
 export default router;
