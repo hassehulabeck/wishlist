@@ -1,52 +1,44 @@
 <template>
   <div>
     <section v-if="message.length>0"> {{ message }} </section>
-    <h2>Ändra en produkt</h2>
-    <label for="">Produkt</label>
+    <h2>Ändra en önskning</h2>
+    <label for="">Önskning</label>
     <input
       type="text"
       name="name"
-      v-model="product.name">
-    <label for="">Pris</label>
-    <input
-      type="number"
-      name="price"
-      v-model="product.price">
-    <label for="">Färg</label>
-    <input
-      type="text"
-      name="color"
-      v-model="product.color">
-    <button @click="editera(product)">Editera</button>
+      v-model="wish.name">
+    <button @click="editera(wish)">Editera</button>
   </div>
 </template>
 
 <script>
-  import {db} from '../firebase-config'
+  import {fb, db} from '../firebase-config'
 
   export default {
     name: 'edit',
     data() {
       return {
         name: '',
-        price: 0,
-        color: '',
         message: ''
       }
     },
-    firebase: {
-      products: db.ref('products')
+    created () {
+      this.$bindAsArray('wishes', db.ref('wishes/' + fb.auth().currentUser.uid))
     },
     computed: {
-      product() {
-        return this.$route.params.product
+      wish() {
+        return this.$route.params.wish
       }
     },
+    firebase: {
+      wishes: db.ref('wishes'),
+      allWishes: db.ref('allWishes')
+    },
     methods: {
-      editera (product) {
-        this.$firebaseRefs.products.child(product['.key']).child('name').set(product.name)
-        this.$firebaseRefs.products.child(product['.key']).child('price').set(product.price)
-        this.$firebaseRefs.products.child(product['.key']).child('color').set(product.color)
+      editera (wish) {
+        this.$firebaseRefs.wishes.child(wish['.key']).child('name').set(wish.name)
+        this.$firebaseRefs.allWishes.child(wish['.key']).child('name').set(wish.name)
+        this.message = 'Ändringen genomförd'
       }
     }
   }

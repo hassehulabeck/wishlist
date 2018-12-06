@@ -1,44 +1,55 @@
 <template>
   <div>
     <section v-if="message.length>0"> {{ message }} </section>
-    <h2>Lägg till en produkt</h2>
-    <label for="">Produkt</label>
+    <h2>Lägg till en önskning</h2>
+    <label for="">Önskning</label>
     <input type="text" name="name" v-model="name">
-    <label for="">Pris</label>
-    <input type="number" name="price" v-model="price">
-    <label for="">Färg</label>
-    <input type="text" name="color" v-model="color">
-    <button @click="storeData">Lägg till produkt</button>
+    <button @click="storeData">Lägg till önskning på listan</button>
   </div>
 </template>
 
 <script>
-import {db} from '../firebase-config'
+import {fb, db} from '../firebase-config'
 
 export default {
   name: 'Inputter',
   data() {
     return {
       name: '',
-      price: 0,
-      color: '',
       message: ''
     }
   },
+  computed: {
+    user() {
+      return fb.auth().currentUser;
+    }
+  },
+  created () {
+    this.$bindAsObject('wishes', db.ref('wishes/' + this.user.uid))
+    this.$bindAsObject('wishroot', db.ref('/'))
+  },
   firebase: {
-    products: db.ref('products')
+    wishes: db.ref('wishes')
   },
   methods: {
     storeData() {
-      this.$firebaseRefs.products.push({
-        name: this.name,
-        price: this.price,
-        color: this.color
+      var name = this.name
+      this.$firebaseRefs.wishes.push({
+        name: name
+      },(error) => {
+        if (error) {
+          console.log(error)
+        }
+        else {
+          // Lägg till önskningen i "allWishes", så att tomten kan se.
+          this.$firebaseRefs.wishroot.child('allWishes').push({
+            name: name,
+            user: this.user.uid
+          })
+        }
       })
-      this.message = "Gick bra att pusha data";
+      this.message = "Your wish is now added to the list";
       this.name = ''
-      this.price = ''
-      this.color = ''
     }
   }
 }
@@ -57,5 +68,8 @@ label {
 div {
   width: 33%;
   margin: 0 auto;
+}
+section {
+  min-height: 2em;
 }
 </style>

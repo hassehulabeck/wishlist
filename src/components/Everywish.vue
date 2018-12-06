@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h1>Hela önskelistan</h1>
+    <h1>Alla önskningar</h1>
     <ul>
-      <li v-for="wish in wishes" :key="wish.id">
-        <router-link :to="{ name: 'edit', params: {wish: wish} }">{{ wish.name }}</router-link>
+      <li v-for="wish in allWishes" :key="wish.id">
+        {{ wish.name }}
         <pre>   <a @click="remove(wish)">x</a></pre>
       </li>
     </ul>
@@ -14,7 +14,7 @@
 import {fb, db} from '../firebase-config'
 
 export default {
-  name: 'List',
+  name: 'Everywish',
   data() {
     return {
       wish: '',
@@ -22,19 +22,15 @@ export default {
     }
   },
   created () {
-    this.$bindAsArray('wishes', db.ref('wishes/' + fb.auth().currentUser.uid))
+    this.$bindAsArray('allWishes', db.ref('allWishes'))
   },
   firebase: {
-    wishes: db.ref('wishes'),
     allWishes: db.ref('allWishes')
   },
   methods: {
     remove(wish) {
-      this.$firebaseRefs.wishes.child(wish['.key']).remove()
       this.$firebaseRefs.allWishes.child(wish['.key']).remove()
-    },
-    edit(wish) {
-      this.$router.replace('edit')
+      // Fixa så att santa tar bort även i users önskelista?
     }
   }
 }

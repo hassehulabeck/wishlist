@@ -1,8 +1,6 @@
 <template>
   <div class="home">
-    <h1>Önskelistan</h1>
-    <Inputter/>
-    <List/>
+    <Everywish/>
     <button @click="logout">Logout</button>
   </div>
 </template>
@@ -10,14 +8,12 @@
 <script>
 import firebase from 'firebase';
 // @ is an alias to /src
-import Inputter from '@/components/Inputter'
-import List from '@/components/List'
+import Everywish from '@/components/Everywish'
 
 export default {
-  name: 'home',
+  name: 'santa',
   components: {
-    Inputter,
-    List
+    Everywish
   },
   methods: {
     logout: function() {
